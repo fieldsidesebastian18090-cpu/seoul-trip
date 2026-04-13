@@ -101,6 +101,16 @@ body { max-width: 480px; margin: 0 auto; padding-bottom: 80px; min-height: 100vh
 .fx-quick button { flex: 1; min-width: 60px; padding: 8px 4px; background: #f5f5f5; border: none; border-radius: 6px; font-size: 12px; font-family: inherit; cursor: pointer; }
 .fx-quick button:active { background: #e5e5e5; }
 
+.daily-spend { background: #fff; border-radius: 12px; margin: 20px 0 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); overflow: hidden; }
+.daily-spend-header { background: #1a1a1a; color: #fff; padding: 10px 14px; font-size: 13px; letter-spacing: 0.5px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+.daily-spend-header .sum { font-size: 14px; font-weight: 700; }
+.ds-row { display: flex; align-items: center; padding: 10px 14px; border-bottom: 1px solid #f0f0f0; }
+.ds-row:last-child { border-bottom: none; }
+.ds-row .ds-label { flex: 1; font-size: 13px; }
+.ds-row .ds-icon { margin-right: 8px; font-size: 16px; }
+.ds-row input { width: 90px; padding: 6px 8px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 13px; text-align: right; font-family: inherit; }
+.ds-row input:focus { outline: none; border-color: #1a1a1a; }
+
 .reset-btn { width: 100%; padding: 14px; background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; color: #666; font-size: 13px; cursor: pointer; margin-top: 20px; font-family: inherit; }
 .reset-btn:active { background: #f5f5f5; }
 
@@ -239,6 +249,16 @@ body { max-width: 480px; margin: 0 auto; padding-bottom: 80px; min-height: 100vh
     放弃大巴 → 用 <strong>Kakao Taxi app</strong> 叫车 → 约 ₩70,000（¥400）→ 50 分钟到酒店<br>
     酒店 24h 有人，不用慌
   </div>
+
+  <div class="daily-spend">
+    <div class="daily-spend-header">
+      <span>💰 今日开销（¥）</span>
+      <span class="sum" id="sum-d1">0</span>
+    </div>
+    <div class="ds-row"><span class="ds-icon">🚌</span><span class="ds-label">交通（大巴/打车）</span><input type="number" data-day="d1" data-cat="transport" placeholder="0"></div>
+    <div class="ds-row"><span class="ds-icon">🍜</span><span class="ds-label">餐饮（宵夜/便利店）</span><input type="number" data-day="d1" data-cat="food" placeholder="0"></div>
+    <div class="ds-row"><span class="ds-icon">📱</span><span class="ds-label">杂项（eSIM/卡/充值）</span><input type="number" data-day="d1" data-cat="other" placeholder="0"></div>
+  </div>
 </div>
 
 <!-- 6.13 见面会日 -->
@@ -327,6 +347,18 @@ body { max-width: 480px; margin: 0 auto; padding-bottom: 80px; min-height: 100vh
     <div class="item"><input type="checkbox" id="br3"><label for="br3">充电宝满电</label></div>
     <div class="item"><input type="checkbox" id="br4"><label for="br4">水 + 小零食</label></div>
     <div class="item"><input type="checkbox" id="br5"><label for="br5">应援物（如有规定）</label></div>
+  </div>
+
+  <div class="daily-spend">
+    <div class="daily-spend-header">
+      <span>💰 今日开销（¥）</span>
+      <span class="sum" id="sum-d2">0</span>
+    </div>
+    <div class="ds-row"><span class="ds-icon">🚇</span><span class="ds-label">交通（地铁/公交）</span><input type="number" data-day="d2" data-cat="transport" placeholder="0"></div>
+    <div class="ds-row"><span class="ds-icon">🍳</span><span class="ds-label">早午餐</span><input type="number" data-day="d2" data-cat="brunch" placeholder="0"></div>
+    <div class="ds-row"><span class="ds-icon">🍜</span><span class="ds-label">中场 + 晚餐</span><input type="number" data-day="d2" data-cat="meals" placeholder="0"></div>
+    <div class="ds-row"><span class="ds-icon">🎁</span><span class="ds-label">见面会周边/应援</span><input type="number" data-day="d2" data-cat="merch" placeholder="0"></div>
+    <div class="ds-row"><span class="ds-icon">💧</span><span class="ds-label">饮料/零食</span><input type="number" data-day="d2" data-cat="snack" placeholder="0"></div>
   </div>
 </div>
 
@@ -432,44 +464,95 @@ body { max-width: 480px; margin: 0 auto; padding-bottom: 80px; min-height: 100vh
     <div class="item"><input type="checkbox" id="t2"><label for="t2">每笔消费拍照记账</label></div>
     <div class="item"><input type="checkbox" id="t3"><label for="t3">买完立刻装袋别拎手上</label></div>
   </div>
+
+  <div class="daily-spend">
+    <div class="daily-spend-header">
+      <span>💰 今日开销（¥）</span>
+      <span class="sum" id="sum-d3">0</span>
+    </div>
+    <div class="ds-row"><span class="ds-icon">🚇</span><span class="ds-label">交通（地铁）</span><input type="number" data-day="d3" data-cat="transport" placeholder="0"></div>
+    <div class="ds-row"><span class="ds-icon">🍽</span><span class="ds-label">三餐（午/晚/咖啡）</span><input type="number" data-day="d3" data-cat="food" placeholder="0"></div>
+    <div class="ds-row"><span class="ds-icon">🛍</span><span class="ds-label">Acne Studios</span><input type="number" data-day="d3" data-cat="acne" placeholder="0"></div>
+    <div class="ds-row"><span class="ds-icon">🌸</span><span class="ds-label">Diptyque</span><input type="number" data-day="d3" data-cat="diptyque" placeholder="0"></div>
+    <div class="ds-row"><span class="ds-icon">👗</span><span class="ds-label">其他服饰（ADER/Tamburins）</span><input type="number" data-day="d3" data-cat="fashion" placeholder="0"></div>
+    <div class="ds-row"><span class="ds-icon">💄</span><span class="ds-label">美妆护肤</span><input type="number" data-day="d3" data-cat="beauty" placeholder="0"></div>
+    <div class="ds-row"><span class="ds-icon">🎁</span><span class="ds-label">伴手礼 / 其他</span><input type="number" data-day="d3" data-cat="other" placeholder="0"></div>
+  </div>
 </div>
 
 <!-- 6.15 离开日 -->
 <div class="section" id="d4">
   <div class="info-box warn">
-    <strong>✈️ 起飞前 3 小时</strong>
-    从酒店出发。机场退税留 40 分钟，大件+贵重品必须托运前退税。
+    <strong>✈️ CA136 · 15:45 起飞</strong>
+    建议 12:45 到机场（T1） · 11:30 从酒店出发 · 退税留 40 分钟
   </div>
 
   <div class="time-block">
-    <div class="time">早上</div>
+    <div class="time">09:00–10:30</div>
     <div class="title">早餐 + 收拾行李</div>
-    <div class="desc">便利店/面包店解决 · 检查证件和充电器</div>
+    <div class="desc">酒店附近便利店 / 面包店 · 检查证件、充电器、退税小票</div>
   </div>
 
   <div class="time-block">
-    <div class="time">起飞前 3h</div>
-    <div class="title">Check-out 出发</div>
-    <div class="desc">AREX 首尔站 → 仁川机场约 1 小时</div>
+    <div class="time">10:30–11:30</div>
+    <div class="title">Check-out 前最后巡检</div>
+    <div class="desc">床头柜 · 浴室 · 保险箱 · 抽屉 · 行李秤测重</div>
+  </div>
+
+  <div class="time-block">
+    <div class="time">11:30</div>
+    <div class="title">出发去仁川机场 T1</div>
+    <div class="desc">目标 12:45 到机场（起飞前 3 小时）</div>
     <div class="transit">
-      <div class="route">🚇 酒店 → 仁川机场（方案 A 推荐）</div>
-      <div class="detail">梨大站<span class="line l2">2</span>→ 首尔站换<span class="line la">AREX</span>→ 仁川机场 T1<br>普通列车 ₩4,750 · 60 分钟 · 直通列车 ₩9,500 · 43 分钟</div>
+      <div class="route">🚌 方案 A：6002 大巴直达（推荐）</div>
+      <div class="detail">新村站附近 6002 路反向直达 T1<br>₩17,000 · 70 分钟 · 不用换乘、带行李方便</div>
     </div>
     <div class="transit">
-      <div class="route">🚌 酒店 → 仁川机场（方案 B）</div>
-      <div class="detail">新村站附近乘 <strong>6002 路反向</strong>直达机场<br>₩17,000 · 70 分钟 · 不用换乘、行李方便</div>
+      <div class="route">🚇 方案 B：AREX 地铁</div>
+      <div class="detail">梨大站<span class="line l2">2</span>→ 首尔站换<span class="line la">AREX</span>→ T1<br>普通 ₩4,750 / 60 分钟 · 直通 ₩9,500 / 43 分钟</div>
     </div>
   </div>
 
   <div class="time-block">
-    <div class="time">起飞前 2h</div>
+    <div class="time">12:45–13:15</div>
     <div class="title">机场退税</div>
-    <div class="desc">T1 3 楼退税柜台 · 小额机器自动退 · 大额柜台办</div>
+    <div class="desc">T1 三楼退税柜台（L 区域）<br>单笔 ₩75,000 以下机器自动退 · 以上柜台办<br>退税物品要提前取出、可能抽查</div>
   </div>
 
   <div class="time-block">
-    <div class="time">起飞前 1.5h</div>
-    <div class="title">值机 + 安检 + 登机口</div>
+    <div class="time">13:15–13:45</div>
+    <div class="title">值机 CA136</div>
+    <div class="desc">T1 三楼国航柜台 · 托运行李 · 拿登机牌</div>
+  </div>
+
+  <div class="time-block">
+    <div class="time">13:45–14:30</div>
+    <div class="title">安检 + 出境</div>
+    <div class="desc">外国人通道 · 护照 + 登机牌<br>建议 14:30 到登机口</div>
+  </div>
+
+  <div class="time-block">
+    <div class="time">15:15</div>
+    <div class="title">登机</div>
+    <div class="desc">CA136 起飞前 30 分钟开始登机</div>
+  </div>
+
+  <div class="time-block">
+    <div class="time">15:45</div>
+    <div class="title">✈️ 起飞 · 首尔 → 北京</div>
+    <div class="desc">2h20m · 17:05 到达 PEK T3</div>
+  </div>
+
+  <div class="time-block">
+    <div class="time">17:05–19:25</div>
+    <div class="title">北京中转 2h20m</div>
+    <div class="desc">⚠️ 行李直达不用取 · 国内转机通道 · 再次安检</div>
+  </div>
+
+  <div class="time-block">
+    <div class="time">19:25</div>
+    <div class="title">✈️ CA1931 · 北京 → 南宁</div>
+    <div class="desc">3h40m · 23:05 抵达南宁</div>
   </div>
 
   <div class="section-title">离开前 checklist</div>
@@ -480,6 +563,17 @@ body { max-width: 480px; margin: 0 auto; padding-bottom: 80px; min-height: 100vh
     <div class="item"><input type="checkbox" id="e4"><label for="e4">房间最后巡查（床头柜/浴室/保险箱）</label></div>
     <div class="item"><input type="checkbox" id="e5"><label for="e5">退 T-money 卡押金（如需）</label></div>
     <div class="item"><input type="checkbox" id="e6"><label for="e6">机场办理退税</label></div>
+  </div>
+
+  <div class="daily-spend">
+    <div class="daily-spend-header">
+      <span>💰 今日开销（¥）</span>
+      <span class="sum" id="sum-d4">0</span>
+    </div>
+    <div class="ds-row"><span class="ds-icon">🚌</span><span class="ds-label">机场交通（大巴/AREX）</span><input type="number" data-day="d4" data-cat="transport" placeholder="0"></div>
+    <div class="ds-row"><span class="ds-icon">🥐</span><span class="ds-label">早餐 + 机场餐饮</span><input type="number" data-day="d4" data-cat="food" placeholder="0"></div>
+    <div class="ds-row"><span class="ds-icon">🛒</span><span class="ds-label">机场免税店 / 伴手礼</span><input type="number" data-day="d4" data-cat="dutyfree" placeholder="0"></div>
+    <div class="ds-row"><span class="ds-icon">📦</span><span class="ds-label">行李超重等费用</span><input type="number" data-day="d4" data-cat="other" placeholder="0"></div>
   </div>
 </div>
 
@@ -526,7 +620,7 @@ body { max-width: 480px; margin: 0 auto; padding-bottom: 80px; min-height: 100vh
     <div class="budget-row"><span class="label">Acne Studios</span><input type="number" data-budget="shop1" value="0"></div>
     <div class="budget-row"><span class="label">Diptyque</span><input type="number" data-budget="shop2" value="0"></div>
     <div class="budget-row"><span class="label">其他购物</span><input type="number" data-budget="shop3" value="0"></div>
-    <div class="budget-row"><span class="label">机票</span><input type="number" data-budget="flight" value="0"></div>
+    <div class="budget-row"><span class="label">机票（往返）</span><input type="number" data-budget="flight" value="1901"></div>
     <div class="budget-row"><span class="label">应急零花</span><input type="number" data-budget="misc" value="300"></div>
   </div>
 
@@ -606,6 +700,38 @@ body { max-width: 480px; margin: 0 auto; padding-bottom: 80px; min-height: 100vh
 
 <!-- 信息 -->
 <div class="section" id="info">
+  <div class="section-title">✈️ 航班信息</div>
+  <div class="card">
+    <div class="contact">
+      <div class="name" style="color:#1778d4;">去程 · 06.12 周五 · 总 7h20m</div>
+      <div class="detail" style="margin-top:8px;">
+        <strong>CA1312</strong> 南宁 NNG → 北京 PEK<br>
+        13:40 T2 → 17:15 T3 · 3h35m · 空客 321<br>
+        <br>
+        🔄 北京中转 2h（行李直达）<br>
+        <br>
+        <strong>CA709</strong> 北京 PEK → 首尔 ICN<br>
+        19:15 T3 → <strong>22:00 T1</strong> · 1h45m · 空客 330-200
+      </div>
+    </div>
+    <div class="contact">
+      <div class="name" style="color:#d4003b;">返程 · 06.15 周一 · 总 8h20m</div>
+      <div class="detail" style="margin-top:8px;">
+        <strong>CA136</strong> 首尔 ICN → 北京 PEK<br>
+        <strong>15:45 T1</strong> → 17:05 T3 · 2h20m · 空客 321<br>
+        <br>
+        🔄 北京中转 2h20m（行李直达）<br>
+        <br>
+        <strong>CA1931</strong> 北京 PEK → 南宁 NNG<br>
+        19:25 T3 → 23:05 T2 · 3h40m · 空客 321
+      </div>
+    </div>
+    <div class="contact">
+      <div class="name">中国国际航空客服</div>
+      <div class="detail"><a href="tel:95583">95583（24 小时）</a></div>
+    </div>
+  </div>
+
   <div class="section-title">应急联系</div>
   <div class="card">
     <div class="contact">
@@ -693,8 +819,9 @@ body { max-width: 480px; margin: 0 auto; padding-bottom: 80px; min-height: 100vh
 
 <script>
 const KEY = 'seoul-trip-2026';
-let state = JSON.parse(localStorage.getItem(KEY) || '{"checks":{},"budget":{},"notes":[],"rates":null}');
+let state = JSON.parse(localStorage.getItem(KEY) || '{"checks":{},"budget":{},"notes":[],"rates":null,"daily":{}}');
 if (!state.notes) state.notes = [];
+if (!state.daily) state.daily = {};
 
 function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
 
@@ -823,6 +950,28 @@ function updateRefs() {
   const el = document.getElementById('fx-' + k);
   if (el) el.addEventListener('input', () => fxUpdate(k));
 });
+
+// 每日开销
+function initDailySpend() {
+  document.querySelectorAll('[data-day][data-cat]').forEach(input => {
+    const day = input.dataset.day, cat = input.dataset.cat;
+    const key = `${day}-${cat}`;
+    if (state.daily[key] !== undefined) input.value = state.daily[key];
+    input.addEventListener('input', () => {
+      state.daily[key] = input.value;
+      save();
+      updateDailySum(day);
+    });
+  });
+  ['d1','d2','d3','d4'].forEach(updateDailySum);
+}
+function updateDailySum(day) {
+  let sum = 0;
+  document.querySelectorAll(`[data-day="${day}"]`).forEach(i => sum += Number(i.value) || 0);
+  const el = document.getElementById('sum-' + day);
+  if (el) el.textContent = '¥ ' + sum.toLocaleString();
+}
+initDailySpend();
 
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => {
