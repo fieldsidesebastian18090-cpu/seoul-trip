@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#1a1a1a">
+<title>首尔行 · 6.12-6.15</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { background: #fafafa; color: #1a1a1a; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', sans-serif; font-size: 15px; line-height: 1.5; }
+body { max-width: 480px; margin: 0 auto; padding-bottom: 80px; min-height: 100vh; }
+
+.header { padding: 20px 20px 14px; background: #1a1a1a; color: #fff; position: sticky; top: 0; z-index: 10; }
+.header h1 { font-size: 20px; font-weight: 600; letter-spacing: 0.5px; }
+.header .sub { font-size: 12px; opacity: 0.6; margin-top: 4px; letter-spacing: 1px; }
+.countdown { margin-top: 10px; display: inline-block; background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 20px; font-size: 12px; letter-spacing: 0.5px; }
+.countdown strong { font-size: 14px; font-weight: 700; margin: 0 2px; }
+
+.tabs { display: flex; background: #1a1a1a; border-bottom: 1px solid #333; position: sticky; top: 94px; z-index: 10; overflow-x: auto; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab { flex: 1; min-width: 70px; padding: 12px 4px; color: #888; font-size: 13px; text-align: center; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; }
+.tab.active { color: #fff; border-bottom-color: #fff; font-weight: 600; }
+
+.content { padding: 20px 16px; }
+.section { display: none; }
+.section.active { display: block; animation: fadeIn 0.3s; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+.section-title { font-size: 13px; color: #888; text-transform: uppercase; letter-spacing: 1.5px; margin: 20px 0 10px; font-weight: 600; }
+.section-title:first-child { margin-top: 0; }
+
+.card { background: #fff; border-radius: 12px; padding: 4px 0; margin-bottom: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); overflow: hidden; }
+
+.item { display: flex; align-items: flex-start; padding: 14px 16px; border-bottom: 1px solid #f0f0f0; cursor: pointer; user-select: none; transition: background 0.15s; }
+.item:last-child { border-bottom: none; }
+.item:active { background: #f5f5f5; }
+.item input[type="checkbox"] { margin-right: 12px; margin-top: 3px; width: 18px; height: 18px; accent-color: #1a1a1a; flex-shrink: 0; cursor: pointer; }
+.item label { flex: 1; cursor: pointer; font-size: 14px; }
+.item.checked label { text-decoration: line-through; color: #aaa; }
+.item .note { display: block; font-size: 12px; color: #888; margin-top: 3px; }
+
+.info-box { background: #fff8dc; border-left: 3px solid #d4a017; padding: 12px 14px; border-radius: 6px; margin: 12px 0; font-size: 13px; }
+.info-box.warn { background: #ffe8e8; border-color: #d43a17; }
+.info-box.tip { background: #e8f4ff; border-color: #1778d4; }
+.info-box strong { display: block; margin-bottom: 4px; font-size: 13px; }
+
+.time-block { background: #fff; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; border-left: 3px solid #1a1a1a; }
+.time-block .time { font-size: 13px; font-weight: 600; color: #1a1a1a; letter-spacing: 0.5px; }
+.time-block .title { font-size: 15px; margin-top: 4px; font-weight: 500; }
+.time-block .desc { font-size: 13px; color: #666; margin-top: 6px; line-height: 1.5; }
+
+.budget-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid #f0f0f0; }
+.budget-row:last-child { border-bottom: none; }
+.budget-row .label { font-size: 14px; }
+.budget-row .amount { font-size: 14px; font-weight: 600; color: #1a1a1a; }
+.budget-row input { width: 80px; padding: 6px 8px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; text-align: right; font-family: inherit; }
+.budget-row input:focus { outline: none; border-color: #1a1a1a; }
+.budget-total { background: #1a1a1a; color: #fff; padding: 14px 16px; font-weight: 600; font-size: 15px; display: flex; justify-content: space-between; border-radius: 0 0 12px 12px; }
+
+.contact { padding: 14px 16px; border-bottom: 1px solid #f0f0f0; }
+.contact:last-child { border-bottom: none; }
+.contact .name { font-size: 14px; font-weight: 600; }
+.contact .detail { font-size: 13px; color: #666; margin-top: 4px; }
+.contact a { color: #1778d4; text-decoration: none; }
+
+.transit { background: #eef5ff; border-radius: 8px; padding: 10px 12px; margin: 8px 0; font-size: 13px; color: #1a3a6e; }
+.transit .route { font-weight: 600; letter-spacing: 0.3px; }
+.transit .detail { font-size: 12px; opacity: 0.8; margin-top: 3px; }
+.transit .line { display: inline-block; background: #1778d4; color: #fff; padding: 1px 6px; border-radius: 3px; font-size: 11px; font-weight: 600; margin: 0 2px; }
+.transit .line.l2 { background: #00a84d; }
+.transit .line.l3 { background: #ef7c1c; }
+.transit .line.l6 { background: #cd7c2f; }
+.transit .line.l7 { background: #747f00; }
+.transit .line.lb { background: #d4003b; }
+.transit .line.la { background: #0090d2; }
+
+.food-card { background: #fff5eb; border-left: 3px solid #e89b50; padding: 10px 14px; border-radius: 8px; margin: 8px 0; font-size: 13px; }
+.food-card .food-name { font-weight: 600; color: #5a3817; }
+.food-card .food-desc { color: #8a6644; margin-top: 3px; font-size: 12px; }
+
+.notes-wrap { }
+.note { background: #fff9c4; border-radius: 10px; padding: 12px 14px; margin-bottom: 12px; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+.note textarea { width: 100%; border: none; background: transparent; resize: vertical; font-family: inherit; font-size: 14px; line-height: 1.5; min-height: 60px; color: #3a3015; }
+.note textarea:focus { outline: none; }
+.note .note-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 11px; color: #a08640; }
+.note .note-del { background: none; border: none; color: #c44; cursor: pointer; font-size: 13px; padding: 2px 6px; border-radius: 4px; }
+.note .note-del:active { background: rgba(196,68,68,0.1); }
+.add-note { width: 100%; padding: 14px; background: #1a1a1a; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; margin-bottom: 16px; }
+.add-note:active { opacity: 0.8; }
+
+.fx-card { background: #fff; border-radius: 12px; padding: 18px 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); margin-bottom: 14px; }
+.fx-row { display: flex; align-items: center; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
+.fx-row:last-child { border-bottom: none; }
+.fx-row .fx-code { width: 70px; font-size: 14px; font-weight: 600; color: #1a1a1a; }
+.fx-row .fx-flag { font-size: 20px; margin-right: 8px; }
+.fx-row input { flex: 1; padding: 10px 12px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 16px; font-family: inherit; text-align: right; }
+.fx-row input:focus { outline: none; border-color: #1a1a1a; }
+.fx-info { font-size: 12px; color: #888; text-align: center; margin-top: 8px; }
+.fx-info .refresh { color: #1778d4; cursor: pointer; margin-left: 6px; }
+.fx-quick { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+.fx-quick button { flex: 1; min-width: 60px; padding: 8px 4px; background: #f5f5f5; border: none; border-radius: 6px; font-size: 12px; font-family: inherit; cursor: pointer; }
+.fx-quick button:active { background: #e5e5e5; }
+
+.reset-btn { width: 100%; padding: 14px; background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; color: #666; font-size: 13px; cursor: pointer; margin-top: 20px; font-family: inherit; }
+.reset-btn:active { background: #f5f5f5; }
+
+.progress { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 10px 20px; border-top: 1px solid #e0e0e0; font-size: 12px; color: #666; display: flex; justify-content: space-between; max-width: 480px; margin: 0 auto; }
+.progress-bar { width: 100%; height: 3px; background: #e0e0e0; border-radius: 2px; margin-top: 6px; overflow: hidden; }
+.progress-fill { height: 100%; background: #1a1a1a; transition: width 0.3s; }
+
+@media (max-width: 360px) { .tab { font-size: 12px; } .header h1 { font-size: 18px; } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>首尔行 SEOUL</h1>
+  <div class="sub">2026.06.12 — 06.15 · 见面会之旅</div>
+  <div class="countdown" id="countdown">计算中…</div>
+</div>
+
+<div class="tabs" id="tabs">
+  <div class="tab active" data-tab="prep">行前</div>
+  <div class="tab" data-tab="d1">6.12</div>
+  <div class="tab" data-tab="d2">6.13</div>
+  <div class="tab" data-tab="d3">6.14</div>
+  <div class="tab" data-tab="d4">6.15</div>
+  <div class="tab" data-tab="notes">📝 笔记</div>
+  <div class="tab" data-tab="budget">预算</div>
+  <div class="tab" data-tab="fx">💱 汇率</div>
+  <div class="tab" data-tab="info">信息</div>
+</div>
+
+<div class="content">
+
+<!-- 行前 -->
+<div class="section active" id="prep">
+  <div class="section-title">证件 & 预订</div>
+  <div class="card" data-group="prep-doc">
+    <div class="item"><input type="checkbox" id="p1"><label for="p1">护照有效期 ≥ 6 个月</label></div>
+    <div class="item"><input type="checkbox" id="p2"><label for="p2">K-ETA 电子许可（提前 72 小时申请）</label></div>
+    <div class="item"><input type="checkbox" id="p3"><label for="p3">E-Arrival 入境卡线上填写</label></div>
+    <div class="item"><input type="checkbox" id="p4"><label for="p4">机票行程单保存离线</label></div>
+    <div class="item"><input type="checkbox" id="p5"><label for="p5">酒店 Booking 确认邮件 PDF</label></div>
+    <div class="item"><input type="checkbox" id="p6"><label for="p6">见面会电子票截图 + 打印备份</label></div>
+  </div>
+
+  <div class="section-title">手机 & APP</div>
+  <div class="card" data-group="prep-app">
+    <div class="item"><input type="checkbox" id="a1"><label for="a1">韩国 eSIM / 随身 WiFi</label></div>
+    <div class="item"><input type="checkbox" id="a2"><label for="a2">Kakao Map（主导航）</label></div>
+    <div class="item"><input type="checkbox" id="a3"><label for="a3">Naver Map（备用）</label></div>
+    <div class="item"><input type="checkbox" id="a4"><label for="a4">Papago 翻译</label></div>
+    <div class="item"><input type="checkbox" id="a5"><label for="a5">Kakao Metro 地铁</label></div>
+    <div class="item"><input type="checkbox" id="a6"><label for="a6">Kakao Taxi（应急用）</label></div>
+  </div>
+
+  <div class="section-title">钱 & 卡</div>
+  <div class="card" data-group="prep-money">
+    <div class="item"><input type="checkbox" id="m1"><label for="m1">换韩元现金 ₩200,000–300,000</label></div>
+    <div class="item"><input type="checkbox" id="m2"><label for="m2">Visa/Master 信用卡</label></div>
+    <div class="item"><input type="checkbox" id="m3"><label for="m3">T-money 卡（机场买）</label></div>
+  </div>
+
+  <div class="section-title">行李</div>
+  <div class="card" data-group="prep-bag">
+    <div class="item"><input type="checkbox" id="b1"><label for="b1">舒适走路鞋 × 2</label></div>
+    <div class="item"><input type="checkbox" id="b2"><label for="b2">见面会战服 + 妆容</label></div>
+    <div class="item"><input type="checkbox" id="b3"><label for="b3">可折叠购物袋</label></div>
+    <div class="item"><input type="checkbox" id="b4"><label for="b4">充电宝<span class="note">⚠️ 必须手提不托运</span></label></div>
+    <div class="item"><input type="checkbox" id="b5"><label for="b5">插头转换器（德标双圆孔）</label></div>
+    <div class="item"><input type="checkbox" id="b6"><label for="b6">常用药：晕车/感冒/创可贴</label></div>
+  </div>
+</div>
+
+<!-- 6.12 抵达日 -->
+<div class="section" id="d1">
+  <div class="info-box tip">
+    <strong>✅ 酒店已确认 24h 前台</strong>
+    凌晨到也能办 check-in，不用赶时间。保存好酒店邮件回复截图。
+  </div>
+
+  <div class="info-box warn">
+    <strong>🚌 必做：6002 机场大巴末班 23:30</strong>
+    出海关后直奔 <strong>T1 一层 4A 或 11A 站台</strong> · 到<strong>新村站</strong>下车 · ₩17,000 · 70 分钟<br>
+    ⚠️ 错过末班只能打车（约 ₩70,000）
+  </div>
+
+  <div class="time-block">
+    <div class="time">22:00</div>
+    <div class="title">仁川机场落地</div>
+    <div class="desc">开机连机场 WiFi 或激活 eSIM</div>
+  </div>
+
+  <div class="time-block">
+    <div class="time">22:00–22:45</div>
+    <div class="title">过关 + 提行李</div>
+    <div class="desc">便利店买 T-money 卡，充值 ₩20,000</div>
+  </div>
+
+  <div class="time-block">
+    <div class="time">23:00</div>
+    <div class="title">乘 6002 路大巴</div>
+    <div class="desc">站台 4A 或 11A · 票价 ₩17,000 · 约 70 分钟</div>
+    <div class="transit">
+      <div class="route">🚌 6002 路 仁川机场 → 新村</div>
+      <div class="detail">乘车点：T1 出境大厅 4A 或 11A 站台<br>下车站：<strong>新村站（신촌역）</strong>或<strong>梨大站（이대역）</strong><br>下车后步行约 5–8 分钟到酒店</div>
+    </div>
+  </div>
+
+  <div class="time-block">
+    <div class="time">00:30</div>
+    <div class="title">酒店 check-in</div>
+    <div class="desc">H Avenue Hotel Idae Sinchon · 新村路 152</div>
+  </div>
+
+  <div class="section-title">🍜 酒店附近宵夜</div>
+  <div class="food-card">
+    <div class="food-name">GS25 / CU 便利店</div>
+    <div class="food-desc">24 小时 · 方便面、饭团、啤酒宵夜</div>
+  </div>
+  <div class="food-card">
+    <div class="food-name">弘大 / 新村烤肉街</div>
+    <div class="food-desc">部分店开到凌晨 2–4 点，如果不困可以来一顿</div>
+  </div>
+
+  <div class="section-title">抵达日 checklist</div>
+  <div class="card" data-group="d1-list">
+    <div class="item"><input type="checkbox" id="d1a"><label for="d1a">落地开机激活网络</label></div>
+    <div class="item"><input type="checkbox" id="d1b"><label for="d1b">便利店买 T-money 卡</label></div>
+    <div class="item"><input type="checkbox" id="d1c"><label for="d1c">6002 大巴 · 新村站下车<span class="note">末班 23:30，必须赶上</span></label></div>
+    <div class="item"><input type="checkbox" id="d1d"><label for="d1d">酒店 check-in<span class="note">前台 24h 开放</span></label></div>
+    <div class="item"><input type="checkbox" id="d1e"><label for="d1e">手机 + 充电宝充满电</label></div>
+  </div>
+
+  <div class="section-title">🆘 应急预案</div>
+  <div class="info-box warn">
+    <strong>如果海关排队超时（23:15 后才出关）</strong>
+    放弃大巴 → 用 <strong>Kakao Taxi app</strong> 叫车 → 约 ₩70,000（¥400）→ 50 分钟到酒店<br>
+    酒店 24h 有人，不用慌
+  </div>
+</div>
+
+<!-- 6.13 见面会日 -->
+<div class="section" id="d2">
+  <div class="info-box">
+    <strong>🎤 今日重点</strong>
+    两场见面会：14:00 和 18:30。中场 2 小时留在梨大附近休息。
+  </div>
+
+  <div class="time-block">
+    <div class="time">10:30</div>
+    <div class="title">起床 + 延南洞早午餐</div>
+    <div class="desc">延南洞小店氛围好、人不多</div>
+  </div>
+
+  <div class="time-block">
+    <div class="time">13:00</div>
+    <div class="title">出发去梨大</div>
+    <div class="desc">酒店到梨大约 10 分钟</div>
+    <div class="transit">
+      <div class="route">🚇 酒店 → 梨大站</div>
+      <div class="detail">新村站（신촌역）<span class="line l2">2</span>→ 梨大站（이대역）· <strong>仅 1 站</strong> · 5 分钟</div>
+    </div>
+    <div class="transit">
+      <div class="route">🚶 步行方案</div>
+      <div class="detail">酒店到梨大正门约 **12–15 分钟**，天气好可以走</div>
+    </div>
+  </div>
+
+  <div class="time-block">
+    <div class="time">14:00–16:00</div>
+    <div class="title">🎤 第一场见面会（120 分钟）</div>
+  </div>
+
+  <div class="time-block">
+    <div class="time">16:00–18:00</div>
+    <div class="title">中场休息</div>
+    <div class="desc">梨大咖啡店充电 + 快速晚饭 · 17:30 回场地</div>
+  </div>
+
+  <div class="time-block">
+    <div class="time">18:30–20:30</div>
+    <div class="title">🎤 第二场见面会（120 分钟）</div>
+  </div>
+
+  <div class="time-block">
+    <div class="time">21:00</div>
+    <div class="title">梨大/新村晚饭</div>
+    <div class="desc">烤肉或汤饭 · 酒店步行可达</div>
+  </div>
+
+  <div class="section-title">🍜 今日推荐美食（新村/延南洞）</div>
+  <div class="food-card">
+    <div class="food-name">延南洞早午餐街（연남동）</div>
+    <div class="food-desc">弘大入口站 3 号出口 · 韩式早午餐、brunch cafe 集中</div>
+  </div>
+  <div class="food-card">
+    <div class="food-name">圣饭店（성반점）</div>
+    <div class="food-desc">新村 · 中华料理名店 · 糖醋肉、炸酱面</div>
+  </div>
+  <div class="food-card">
+    <div class="food-name">新村铁板炸鸡（철판닭갈비）</div>
+    <div class="food-desc">新村站周边 · 春川式辣炒鸡，中场快餐首选</div>
+  </div>
+  <div class="food-card">
+    <div class="food-name">延南洞猪排屋 / 汤饭店</div>
+    <div class="food-desc">两场之间 40 分钟吃完的选择</div>
+  </div>
+  <div class="food-card">
+    <div class="food-name">弘大炸鸡啤酒店（치맥）</div>
+    <div class="food-desc">弘大一带多家 · 散场后庆祝首选 · 开到凌晨</div>
+  </div>
+
+  <div class="section-title">见面会铁律</div>
+  <div class="card" data-group="d2-rule">
+    <div class="item"><input type="checkbox" id="r1"><label for="r1">不带单反/长焦</label></div>
+    <div class="item"><input type="checkbox" id="r2"><label for="r2">手机静音</label></div>
+    <div class="item"><input type="checkbox" id="r3"><label for="r3">不代拍、不二次传播</label></div>
+    <div class="item"><input type="checkbox" id="r4"><label for="r4">场内不饮食</label></div>
+  </div>
+
+  <div class="section-title">今日必带</div>
+  <div class="card" data-group="d2-bring">
+    <div class="item"><input type="checkbox" id="br1"><label for="br1">见面会票（电子 + 纸质）</label></div>
+    <div class="item"><input type="checkbox" id="br2"><label for="br2">护照/身份证明</label></div>
+    <div class="item"><input type="checkbox" id="br3"><label for="br3">充电宝满电</label></div>
+    <div class="item"><input type="checkbox" id="br4"><label for="br4">水 + 小零食</label></div>
+    <div class="item"><input type="checkbox" id="br5"><label for="br5">应援物（如有规定）</label></div>
+  </div>
+</div>
+
+<!-- 6.14 购物日 -->
+<div class="section" id="d3">
+  <div class="info-box tip">
+    <strong>🛍 关店时间（重要）</strong>
+    Acne Cheongdam 周日 12:00–20:00 · Diptyque 各店 11:00–21:00 · 卡好时间
+  </div>
+
+  <div class="time-block">
+    <div class="time">11:00–13:00</div>
+    <div class="title">📍 汉南洞</div>
+    <div class="desc">ADER ERROR · Tamburins · Maison Margiela · Comme des Garçons</div>
+    <div class="transit">
+      <div class="route">🚇 酒店 → 汉南洞</div>
+      <div class="detail">梨大站<span class="line l2">2</span>→ 合井站换<span class="line l6">6</span>→ 汉江镇站（한강진역）· 约 35 分钟</div>
+    </div>
+  </div>
+
+  <div class="time-block">
+    <div class="time">13:00–14:00</div>
+    <div class="title">汉南午餐</div>
+    <div class="desc">Passion 5 或附近咖啡店 brunch</div>
+  </div>
+
+  <div class="time-block">
+    <div class="time">14:30–16:30</div>
+    <div class="title">📍 圣水洞</div>
+    <div class="desc">Diptyque 圣水店 · LCDC Seoul · Nudake · Tamburins 圣水</div>
+    <div class="transit">
+      <div class="route">🚇 汉南 → 圣水</div>
+      <div class="detail">汉江镇站<span class="line l6">6</span>→ 药水站换<span class="line l3">3</span>→ 忠武路换<span class="line l2">2</span>→ 圣水站 · 约 30 分钟<br>💡 或直接打车 15 分钟 ₩8,000</div>
+    </div>
+  </div>
+
+  <div class="time-block">
+    <div class="time">17:00–19:00</div>
+    <div class="title">📍 清潭洞 Acne Studios</div>
+    <div class="desc">⚠️ 20:00 关门，务必 19:30 前入店</div>
+    <div class="transit">
+      <div class="route">🚇 圣水 → 清潭/狎鸥亭</div>
+      <div class="detail">圣水站<span class="line l2">2</span>→ 宣陵站换<span class="line lb">盆唐</span>→ 狎鸥亭罗德奥站（5 号出口）· 约 25 分钟<br>出站步行 8 分钟到 Acne Studios</div>
+    </div>
+  </div>
+
+  <div class="time-block">
+    <div class="time">19:30–21:00</div>
+    <div class="title">📍 新沙洞林荫道</div>
+    <div class="desc">晚餐 + Diptyque 林荫道店（21:00 关）· 二选一别贪</div>
+    <div class="transit">
+      <div class="route">🚶 清潭 → 林荫道</div>
+      <div class="detail">狎鸥亭罗德奥<span class="line lb">盆唐</span>→ 新沙站 · 1 站 3 分钟<br>或步行穿过林荫道 15 分钟（推荐，顺路逛）</div>
+    </div>
+    <div class="transit">
+      <div class="route">🚇 林荫道 → 酒店（回程）</div>
+      <div class="detail">新沙站<span class="line l3">3</span>→ 忠武路换<span class="line l2">2</span>→ 梨大站 · 约 35 分钟<br>或新沙<span class="line lb">盆唐</span>→ 首尔站<span class="line l2">2</span>→ 梨大 · 约 40 分钟</div>
+    </div>
+  </div>
+
+  <div class="section-title">🍜 今日推荐美食</div>
+  <div class="food-card">
+    <div class="food-name">Passion 5（汉南洞）</div>
+    <div class="food-desc">首尔最强烘焙 · 汉南 Tamburins 隔壁</div>
+  </div>
+  <div class="food-card">
+    <div class="food-name">汉南洞参鸡汤（한남삼계탕）</div>
+    <div class="food-desc">汉江镇站附近 · 免预约排队即可 · 补身首选</div>
+  </div>
+  <div class="food-card">
+    <div class="food-name">梨泰院部队锅街</div>
+    <div class="food-desc">梨泰院站周边 · 多家店选 · walk-in</div>
+  </div>
+  <div class="food-card">
+    <div class="food-name">Nudake（圣水）</div>
+    <div class="food-desc">Gentle Monster 旗下 · 视觉系甜品咖啡</div>
+  </div>
+  <div class="food-card">
+    <div class="food-name">大林仓库 Cafe Onion 圣水店</div>
+    <div class="food-desc">韩国最火咖啡店之一 · 烘焙超赞</div>
+  </div>
+  <div class="food-card">
+    <div class="food-name">林荫道石锅拌饭 / 汤饭小店</div>
+    <div class="food-desc">新沙站一带 · 无需预约 · 晚餐简餐收尾</div>
+  </div>
+  <div class="food-card">
+    <div class="food-name">Cafe Onion 安国店</div>
+    <div class="food-desc">近林荫道 · 盐面包 + 拿铁打卡</div>
+  </div>
+
+  <div class="section-title">购物必备</div>
+  <div class="card" data-group="d3-bring">
+    <div class="item"><input type="checkbox" id="s1"><label for="s1">护照（退税必需）</label></div>
+    <div class="item"><input type="checkbox" id="s2"><label for="s2">信用卡 + 少量现金</label></div>
+    <div class="item"><input type="checkbox" id="s3"><label for="s3">折叠购物袋 × 2</label></div>
+    <div class="item"><input type="checkbox" id="s4"><label for="s4">充电宝</label></div>
+    <div class="item"><input type="checkbox" id="s5"><label for="s5">退税小票全部收好</label></div>
+  </div>
+
+  <div class="section-title">购物提醒</div>
+  <div class="card" data-group="d3-tip">
+    <div class="item"><input type="checkbox" id="t1"><label for="t1">单店满 ₩30,000 现场退税<span class="note">或机场统一退</span></label></div>
+    <div class="item"><input type="checkbox" id="t2"><label for="t2">每笔消费拍照记账</label></div>
+    <div class="item"><input type="checkbox" id="t3"><label for="t3">买完立刻装袋别拎手上</label></div>
+  </div>
+</div>
+
+<!-- 6.15 离开日 -->
+<div class="section" id="d4">
+  <div class="info-box warn">
+    <strong>✈️ 起飞前 3 小时</strong>
+    从酒店出发。机场退税留 40 分钟，大件+贵重品必须托运前退税。
+  </div>
+
+  <div class="time-block">
+    <div class="time">早上</div>
+    <div class="title">早餐 + 收拾行李</div>
+    <div class="desc">便利店/面包店解决 · 检查证件和充电器</div>
+  </div>
+
+  <div class="time-block">
+    <div class="time">起飞前 3h</div>
+    <div class="title">Check-out 出发</div>
+    <div class="desc">AREX 首尔站 → 仁川机场约 1 小时</div>
+    <div class="transit">
+      <div class="route">🚇 酒店 → 仁川机场（方案 A 推荐）</div>
+      <div class="detail">梨大站<span class="line l2">2</span>→ 首尔站换<span class="line la">AREX</span>→ 仁川机场 T1<br>普通列车 ₩4,750 · 60 分钟 · 直通列车 ₩9,500 · 43 分钟</div>
+    </div>
+    <div class="transit">
+      <div class="route">🚌 酒店 → 仁川机场（方案 B）</div>
+      <div class="detail">新村站附近乘 <strong>6002 路反向</strong>直达机场<br>₩17,000 · 70 分钟 · 不用换乘、行李方便</div>
+    </div>
+  </div>
+
+  <div class="time-block">
+    <div class="time">起飞前 2h</div>
+    <div class="title">机场退税</div>
+    <div class="desc">T1 3 楼退税柜台 · 小额机器自动退 · 大额柜台办</div>
+  </div>
+
+  <div class="time-block">
+    <div class="time">起飞前 1.5h</div>
+    <div class="title">值机 + 安检 + 登机口</div>
+  </div>
+
+  <div class="section-title">离开前 checklist</div>
+  <div class="card" data-group="d4-list">
+    <div class="item"><input type="checkbox" id="e1"><label for="e1">护照 + 登机牌</label></div>
+    <div class="item"><input type="checkbox" id="e2"><label for="e2">充电器 + 充电宝</label></div>
+    <div class="item"><input type="checkbox" id="e3"><label for="e3">退税小票整理</label></div>
+    <div class="item"><input type="checkbox" id="e4"><label for="e4">房间最后巡查（床头柜/浴室/保险箱）</label></div>
+    <div class="item"><input type="checkbox" id="e5"><label for="e5">退 T-money 卡押金（如需）</label></div>
+    <div class="item"><input type="checkbox" id="e6"><label for="e6">机场办理退税</label></div>
+  </div>
+</div>
+
+<!-- 笔记 -->
+<div class="section" id="notes">
+  <div class="info-box tip">
+    <strong>📝 便签笔记</strong>
+    随时记录想法、购物清单、偶遇的好店 · 自动保存
+  </div>
+  <button class="add-note" onclick="addNote()">+ 新建笔记</button>
+  <div class="notes-wrap" id="notes-wrap"></div>
+</div>
+
+<!-- 预算 -->
+<div class="section" id="budget">
+  <div class="info-box tip">
+    <strong>💰 预算追踪</strong>
+    点击金额可修改实际花费 · 自动累计总支出
+  </div>
+
+  <div class="section-title">已付</div>
+  <div class="card">
+    <div class="budget-row"><span class="label">酒店 3 晚</span><input type="number" data-budget="hotel" value="1762"></div>
+    <div class="budget-row"><span class="label">见面会门票</span><input type="number" data-budget="ticket" value="1100"></div>
+  </div>
+
+  <div class="section-title">交通</div>
+  <div class="card">
+    <div class="budget-row"><span class="label">6.12 机场大巴</span><input type="number" data-budget="bus1" value="100"></div>
+    <div class="budget-row"><span class="label">6.13 地铁公交</span><input type="number" data-budget="bus2" value="50"></div>
+    <div class="budget-row"><span class="label">6.14 地铁公交</span><input type="number" data-budget="bus3" value="50"></div>
+    <div class="budget-row"><span class="label">6.15 AREX 机场</span><input type="number" data-budget="bus4" value="50"></div>
+  </div>
+
+  <div class="section-title">吃住</div>
+  <div class="card">
+    <div class="budget-row"><span class="label">6.13 三餐</span><input type="number" data-budget="food1" value="250"></div>
+    <div class="budget-row"><span class="label">6.14 三餐</span><input type="number" data-budget="food2" value="250"></div>
+    <div class="budget-row"><span class="label">6.15 早餐 + 机场</span><input type="number" data-budget="food3" value="100"></div>
+  </div>
+
+  <div class="section-title">购物 & 其他</div>
+  <div class="card">
+    <div class="budget-row"><span class="label">Acne Studios</span><input type="number" data-budget="shop1" value="0"></div>
+    <div class="budget-row"><span class="label">Diptyque</span><input type="number" data-budget="shop2" value="0"></div>
+    <div class="budget-row"><span class="label">其他购物</span><input type="number" data-budget="shop3" value="0"></div>
+    <div class="budget-row"><span class="label">机票</span><input type="number" data-budget="flight" value="0"></div>
+    <div class="budget-row"><span class="label">应急零花</span><input type="number" data-budget="misc" value="300"></div>
+  </div>
+
+  <div class="card" style="padding: 0;">
+    <div class="budget-total">
+      <span>总支出</span>
+      <span id="budget-total">¥ 0</span>
+    </div>
+  </div>
+</div>
+
+<!-- 汇率 -->
+<div class="section" id="fx">
+  <div class="info-box tip">
+    <strong>💱 实时汇率</strong>
+    在任一币种输入金额，其他自动换算
+  </div>
+
+  <div class="fx-card">
+    <div class="fx-row">
+      <div class="fx-code"><span class="fx-flag">🇰🇷</span>KRW</div>
+      <input type="number" id="fx-krw" placeholder="韩元" step="100">
+    </div>
+    <div class="fx-row">
+      <div class="fx-code"><span class="fx-flag">🇨🇳</span>CNY</div>
+      <input type="number" id="fx-cny" placeholder="人民币" step="1">
+    </div>
+    <div class="fx-row">
+      <div class="fx-code"><span class="fx-flag">🇺🇸</span>USD</div>
+      <input type="number" id="fx-usd" placeholder="美元" step="1">
+    </div>
+
+    <div class="fx-quick">
+      <button onclick="fxSet('krw',1000)">₩1,000</button>
+      <button onclick="fxSet('krw',10000)">₩10,000</button>
+      <button onclick="fxSet('krw',30000)">₩30,000</button>
+      <button onclick="fxSet('krw',100000)">₩100,000</button>
+    </div>
+    <div class="fx-quick">
+      <button onclick="fxSet('cny',100)">¥100</button>
+      <button onclick="fxSet('cny',500)">¥500</button>
+      <button onclick="fxSet('cny',1000)">¥1,000</button>
+      <button onclick="fxSet('cny',3000)">¥3,000</button>
+    </div>
+
+    <div class="fx-info" id="fx-info">加载中…</div>
+  </div>
+
+  <div class="section-title">参考价快照</div>
+  <div class="card">
+    <div class="contact">
+      <div class="name">地铁/公交单次</div>
+      <div class="detail" id="ref-1">₩1,500 ≈ ¥—</div>
+    </div>
+    <div class="contact">
+      <div class="name">便利店饭团</div>
+      <div class="detail" id="ref-2">₩2,000 ≈ ¥—</div>
+    </div>
+    <div class="contact">
+      <div class="name">一般午餐汤饭</div>
+      <div class="detail" id="ref-3">₩10,000 ≈ ¥—</div>
+    </div>
+    <div class="contact">
+      <div class="name">韩牛烤肉人均</div>
+      <div class="detail" id="ref-4">₩50,000 ≈ ¥—</div>
+    </div>
+    <div class="contact">
+      <div class="name">Diptyque 香水 75ml</div>
+      <div class="detail" id="ref-5">₩250,000 ≈ ¥—</div>
+    </div>
+    <div class="contact">
+      <div class="name">Acne 毛衣一件</div>
+      <div class="detail" id="ref-6">₩500,000 ≈ ¥—</div>
+    </div>
+  </div>
+</div>
+
+<!-- 信息 -->
+<div class="section" id="info">
+  <div class="section-title">应急联系</div>
+  <div class="card">
+    <div class="contact">
+      <div class="name">韩国报警 / 急救</div>
+      <div class="detail"><a href="tel:112">警察 112</a> · <a href="tel:119">急救 119</a></div>
+    </div>
+    <div class="contact">
+      <div class="name">旅游咨询（中文）</div>
+      <div class="detail"><a href="tel:+82215330909">1330（24 小时中文）</a></div>
+    </div>
+    <div class="contact">
+      <div class="name">中国驻韩大使馆</div>
+      <div class="detail"><a href="tel:+82227382721">+82-2-738-2721</a></div>
+    </div>
+    <div class="contact">
+      <div class="name">仁川机场咨询</div>
+      <div class="detail"><a href="tel:1577-2600">1577-2600</a></div>
+    </div>
+  </div>
+
+  <div class="section-title">关键地址（复制给司机/问路）</div>
+  <div class="card">
+    <div class="contact">
+      <div class="name">梨花女子大学 이화여자대학교</div>
+      <div class="detail">서울 서대문구 이화여대길 52</div>
+    </div>
+    <div class="contact">
+      <div class="name">Acne Studios 清潭旗舰</div>
+      <div class="detail">서울 강남구 선릉로162길 27-2<br>狎鸥亭罗德奥站 5 号出口</div>
+    </div>
+    <div class="contact">
+      <div class="name">Diptyque 林荫道店</div>
+      <div class="detail">서울 강남구 압구정로10길 30<br>新沙站 8 号出口</div>
+    </div>
+    <div class="contact">
+      <div class="name">Diptyque 圣水店</div>
+      <div class="detail">서울 성동구 연무장길 20-1</div>
+    </div>
+  </div>
+
+  <div class="section-title">交通速查</div>
+  <div class="card">
+    <div class="contact">
+      <div class="name">T-money 卡</div>
+      <div class="detail">机场/便利店购买 · 押金 ₩4,000 · 地铁公交通刷</div>
+    </div>
+    <div class="contact">
+      <div class="name">AREX 机场铁路</div>
+      <div class="detail">普通车 ₩4,750 · 直通车 ₩9,500 · 末班 23:40</div>
+    </div>
+    <div class="contact">
+      <div class="name">6002 机场大巴</div>
+      <div class="detail">₩17,000 · 末班 23:30 · 到弘大/新村/东大门</div>
+    </div>
+    <div class="contact">
+      <div class="name">地铁末班</div>
+      <div class="detail">首尔地铁大多 23:00–00:30 停运 · 查 Kakao Metro</div>
+    </div>
+  </div>
+
+  <div class="section-title">退税</div>
+  <div class="card">
+    <div class="contact">
+      <div class="name">现场退税（Tax Refund）</div>
+      <div class="detail">单店满 ₩30,000 · 护照 + 小票 · 当场退现金或卡</div>
+    </div>
+    <div class="contact">
+      <div class="name">机场退税</div>
+      <div class="detail">仁川 T1 3 楼退税柜台 · 起飞前 2 小时到达</div>
+    </div>
+  </div>
+
+  <button class="reset-btn" onclick="resetAll()">🔄 重置所有勾选（谨慎）</button>
+</div>
+
+</div>
+
+<div class="progress">
+  <span id="progress-text">0 / 0 已完成</span>
+  <span id="progress-pct">0%</span>
+  <div class="progress-bar" style="position: absolute; bottom: 0; left: 0; right: 0;">
+    <div class="progress-fill" id="progress-fill" style="width: 0%;"></div>
+  </div>
+</div>
+
+<script>
+const KEY = 'seoul-trip-2026';
+let state = JSON.parse(localStorage.getItem(KEY) || '{"checks":{},"budget":{},"notes":[],"rates":null}');
+if (!state.notes) state.notes = [];
+
+function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
+
+// 倒计时
+function updateCountdown() {
+  const target = new Date('2026-06-12T00:00:00+09:00');
+  const end = new Date('2026-06-15T23:59:59+09:00');
+  const now = new Date();
+  const el = document.getElementById('countdown');
+  if (now < target) {
+    const days = Math.ceil((target - now) / 86400000);
+    el.innerHTML = `距离出发还有 <strong>${days}</strong> 天`;
+  } else if (now <= end) {
+    el.innerHTML = `✈️ 旅行中`;
+  } else {
+    el.innerHTML = `🏠 已归国`;
+  }
+}
+
+// 笔记
+function renderNotes() {
+  const wrap = document.getElementById('notes-wrap');
+  wrap.innerHTML = '';
+  if (state.notes.length === 0) {
+    wrap.innerHTML = '<div style="text-align:center;color:#aaa;padding:40px 0;font-size:13px;">还没有笔记，点上方按钮新建</div>';
+    return;
+  }
+  state.notes.forEach((n, idx) => {
+    const d = document.createElement('div');
+    d.className = 'note';
+    d.innerHTML = `
+      <textarea placeholder="写点什么…" data-idx="${idx}">${(n.content||'').replace(/</g,'&lt;')}</textarea>
+      <div class="note-meta">
+        <span>${n.ts || ''}</span>
+        <button class="note-del" onclick="delNote(${idx})">🗑 删除</button>
+      </div>
+    `;
+    wrap.appendChild(d);
+  });
+  wrap.querySelectorAll('textarea').forEach(t => {
+    t.addEventListener('input', e => {
+      const i = Number(e.target.dataset.idx);
+      state.notes[i].content = e.target.value;
+      state.notes[i].ts = new Date().toLocaleString('zh-CN', { month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' });
+      save();
+      const meta = e.target.parentElement.querySelector('.note-meta span');
+      if (meta) meta.textContent = state.notes[i].ts;
+    });
+  });
+}
+function addNote() {
+  state.notes.unshift({ content: '', ts: new Date().toLocaleString('zh-CN', { month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' }) });
+  save();
+  renderNotes();
+  setTimeout(() => { const first = document.querySelector('#notes-wrap textarea'); if (first) first.focus(); }, 50);
+}
+function delNote(i) {
+  if (confirm('删除这条笔记？')) {
+    state.notes.splice(i, 1);
+    save();
+    renderNotes();
+  }
+}
+
+// 汇率
+const FX_FALLBACK = { CNY: 1, KRW: 195, USD: 0.138 };
+let FX_RATES = { ...FX_FALLBACK };
+let fxBase = 'cny';
+
+async function fetchRates() {
+  const info = document.getElementById('fx-info');
+  if (state.rates && state.rates.ts && Date.now() - state.rates.ts < 3600000) {
+    FX_RATES = state.rates.rates;
+    info.innerHTML = `汇率更新于 ${new Date(state.rates.ts).toLocaleString('zh-CN', {month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit'})} <span class="refresh" onclick="forceRefresh()">↻ 刷新</span>`;
+    updateRefs();
+    return;
+  }
+  info.textContent = '加载实时汇率中…';
+  try {
+    const r = await fetch('https://open.er-api.com/v6/latest/CNY');
+    const j = await r.json();
+    if (j && j.rates) {
+      FX_RATES = { CNY: 1, KRW: j.rates.KRW, USD: j.rates.USD };
+      state.rates = { rates: FX_RATES, ts: Date.now() };
+      save();
+      info.innerHTML = `汇率更新于 ${new Date().toLocaleString('zh-CN', {month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit'})} <span class="refresh" onclick="forceRefresh()">↻ 刷新</span>`;
+    } else throw 0;
+  } catch (e) {
+    FX_RATES = FX_FALLBACK;
+    info.innerHTML = `⚠️ 实时汇率获取失败，使用参考值 <span class="refresh" onclick="forceRefresh()">↻ 重试</span>`;
+  }
+  updateRefs();
+}
+function forceRefresh() {
+  state.rates = null;
+  save();
+  fetchRates();
+}
+function fxUpdate(from) {
+  const krw = document.getElementById('fx-krw');
+  const cny = document.getElementById('fx-cny');
+  const usd = document.getElementById('fx-usd');
+  let cnyVal = 0;
+  if (from === 'krw') cnyVal = (Number(krw.value) || 0) / FX_RATES.KRW;
+  else if (from === 'cny') cnyVal = Number(cny.value) || 0;
+  else if (from === 'usd') cnyVal = (Number(usd.value) || 0) / FX_RATES.USD;
+  if (from !== 'krw') krw.value = cnyVal ? Math.round(cnyVal * FX_RATES.KRW) : '';
+  if (from !== 'cny') cny.value = cnyVal ? Number((cnyVal).toFixed(2)) : '';
+  if (from !== 'usd') usd.value = cnyVal ? Number((cnyVal * FX_RATES.USD).toFixed(2)) : '';
+}
+function fxSet(kind, val) {
+  document.getElementById('fx-' + kind).value = val;
+  fxUpdate(kind);
+}
+function updateRefs() {
+  const toRmb = krw => (krw / FX_RATES.KRW).toFixed(2);
+  const map = [
+    [1, 1500], [2, 2000], [3, 10000], [4, 50000], [5, 250000], [6, 500000]
+  ];
+  map.forEach(([id, krw]) => {
+    const el = document.getElementById('ref-' + id);
+    if (el) el.textContent = `₩${krw.toLocaleString()} ≈ ¥${toRmb(krw)}`;
+  });
+}
+['krw','cny','usd'].forEach(k => {
+  const el = document.getElementById('fx-' + k);
+  if (el) el.addEventListener('input', () => fxUpdate(k));
+});
+
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.tab).classList.add('active');
+    window.scrollTo(0, 0);
+  });
+});
+
+document.querySelectorAll('.item').forEach(item => {
+  const cb = item.querySelector('input[type="checkbox"]');
+  const id = cb.id;
+  if (state.checks[id]) { cb.checked = true; item.classList.add('checked'); }
+  item.addEventListener('click', (e) => {
+    if (e.target !== cb) cb.checked = !cb.checked;
+    state.checks[id] = cb.checked;
+    item.classList.toggle('checked', cb.checked);
+    save();
+    updateProgress();
+  });
+});
+
+document.querySelectorAll('[data-budget]').forEach(input => {
+  const key = input.dataset.budget;
+  if (state.budget[key] !== undefined) input.value = state.budget[key];
+  input.addEventListener('input', () => {
+    state.budget[key] = input.value;
+    save();
+    updateBudget();
+  });
+});
+
+function updateBudget() {
+  let total = 0;
+  document.querySelectorAll('[data-budget]').forEach(i => total += Number(i.value) || 0);
+  document.getElementById('budget-total').textContent = '¥ ' + total.toLocaleString();
+}
+
+function updateProgress() {
+  const all = document.querySelectorAll('.item input[type="checkbox"]');
+  const checked = Array.from(all).filter(c => c.checked).length;
+  const pct = all.length ? Math.round(checked / all.length * 100) : 0;
+  document.getElementById('progress-text').textContent = `${checked} / ${all.length} 已完成`;
+  document.getElementById('progress-pct').textContent = pct + '%';
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+function resetAll() {
+  if (confirm('确定重置所有勾选和预算？')) {
+    localStorage.removeItem(KEY);
+    location.reload();
+  }
+}
+
+updateBudget();
+updateProgress();
+updateCountdown();
+setInterval(updateCountdown, 60000);
+renderNotes();
+fetchRates();
+</script>
+
+</body>
+</html>
