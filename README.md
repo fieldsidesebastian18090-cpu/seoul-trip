@@ -4,7 +4,8 @@
 
 ## 使用
 
-直接用浏览器打开 `seoul-trip.html` 即可。
+直接用浏览器打开 `index.html` 即可，或访问线上版：
+https://fieldsidesebastian18090-cpu.github.io/seoul-trip/
 
 - 行前清单 / 每日行程 / 笔记 / 预算 / 汇率换算 全部在一个页面里
 - 勾选、预算、笔记保存在浏览器 localStorage（换浏览器/设备不同步）
@@ -12,4 +13,5 @@
 
 ## 修改
 
-所有内容（HTML/CSS/JS）都在 `seoul-trip.html` 一个文件里，改完刷新浏览器即可。
+所有内容（HTML/CSS/JS）都在 `index.html` 一个文件里，改完刷新浏览器即可。
+推送到 main 分支后 GitHub Pages 会自动更新线上版本。
